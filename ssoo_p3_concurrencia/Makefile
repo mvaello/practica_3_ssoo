@@ -15,7 +15,7 @@ MYFLAGS      = -Wall -g
 MYFLAGSBD	 = 
 
 MYHEADERS    =  -I${INCLUDE_BASE} 
-MYLIBS       =  -L${LIB_BASE} -lbd_banco-64bits -lpthread
+MYLIBS       =  -L${LIB_BASE} -lbd_banco -lpthread
 
 
 #--------------------------
