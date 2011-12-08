@@ -68,7 +68,7 @@ int concurrente_obtener_num_cuentas(int *num_cuentas)
 	 * Completar
 	 */
 	
-    // Se obtiene el número de cuentas del BD utilizando la librería proporcionada
+	// Se obtiene el número de cuentas del BD utilizando la librería proporcionada
 	ret = db_banco_obtener_num_cuentas(&num_cuentas_aux);
 
 	*num_cuentas = num_cuentas_aux;
