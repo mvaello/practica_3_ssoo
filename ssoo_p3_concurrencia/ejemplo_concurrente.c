@@ -12,9 +12,9 @@ void *Hilo2 (void *arg) {
 	concurrente_obtener_num_cuentas(&num_cuentas);
 	concurrente_crear_cuenta(cuenta);	
 	concurrente_incrementar_saldo(cuenta, saldo, &saldo_actualizado);	
-	concurrente_incrementar_saldo(cuenta, saldo, &saldo_actualizado);	
-	concurrente_incrementar_saldo(cuenta, saldo, &saldo_actualizado);	
-	concurrente_incrementar_saldo(cuenta, saldo, &saldo_actualizado);	
+	//concurrente_incrementar_saldo(cuenta, saldo, &saldo_actualizado);	
+	//concurrente_incrementar_saldo(cuenta, saldo, &saldo_actualizado);	
+	//concurrente_incrementar_saldo(cuenta, saldo, &saldo_actualizado);	
 	concurrente_obtener_saldo(cuenta, &saldo);
 
 	pthread_exit (NULL);
@@ -31,7 +31,7 @@ void *Hilo1 (void *arg) {
 	concurrente_obtener_num_cuentas(&num_cuentas);
 	concurrente_crear_cuenta(cuenta);
 	concurrente_incrementar_saldo(cuenta, saldo, &saldo_actualizado);
-	concurrente_decrementar_saldo(cuenta, saldo, &saldo_actualizado);	
+	//concurrente_decrementar_saldo(cuenta, saldo, &saldo_actualizado);	
 	concurrente_obtener_saldo(cuenta, &saldo);
 
 	pthread_exit (NULL);
