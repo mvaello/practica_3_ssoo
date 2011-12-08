@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include "bd_banco.h"
 #include "concurrente.h"
+#define MAX_ACCOUNT 16 //Se define el máximo de cuentas activas 
 
 int concurrente_init()
 {
