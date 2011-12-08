@@ -40,7 +40,7 @@ void *Hilo1 (void *arg) {
 
 
 
-#define MAX 8
+#define MAX 4
 int main(){
 	int i = 0;
 	pthread_t th1[MAX];
