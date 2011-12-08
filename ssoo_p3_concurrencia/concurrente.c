@@ -162,7 +162,7 @@ int concurrente_decrementar_saldo(char *cuenta, int saldo, int *saldo_actualizad
 
 int concurrente_obtener_saldo(char *cuenta, int *saldo)
 {
-    int saldo_aux=0;
+	int saldo_aux=0;
 	int ret, size;
 	void *st_int;
 
