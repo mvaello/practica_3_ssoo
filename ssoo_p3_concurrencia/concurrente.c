@@ -7,7 +7,8 @@
 #include "bd_banco.h"
 #include "concurrente.h"
 
-int concurrente_init(){
+int concurrente_init()
+{
 	int ret;
 
 	/*
@@ -19,7 +20,8 @@ int concurrente_init(){
 	return ret;
 }
 
-int concurrente_destroy(){
+int concurrente_destroy()
+{
 	int ret;
 	
 	/*
@@ -31,7 +33,8 @@ int concurrente_destroy(){
 	return ret;
 }
 
-int concurrente_crear_cuenta(char *cuenta){
+int concurrente_crear_cuenta(char *cuenta)
+{
 	int ret;
 	int size;
 	void *st_int;
@@ -56,8 +59,8 @@ int concurrente_crear_cuenta(char *cuenta){
 	return ret;
 }
 
-int concurrente_obtener_num_cuentas(int *num_cuentas){
-	
+int concurrente_obtener_num_cuentas(int *num_cuentas)
+{	
 	int ret;
 	int num_cuentas_aux = 0;
 	
@@ -73,8 +76,8 @@ int concurrente_obtener_num_cuentas(int *num_cuentas){
 	return ret;
 }
 
-int concurrente_borrar_cuenta(char *cuenta){
-
+int concurrente_borrar_cuenta(char *cuenta)
+{
 	int ret, size;
 	void *st_int;
 	
@@ -99,7 +102,8 @@ int concurrente_borrar_cuenta(char *cuenta){
 	return ret;
 }
 
-int concurrente_incrementar_saldo(char *cuenta, int saldo, int *saldo_actualizado){
+int concurrente_incrementar_saldo(char *cuenta, int saldo, int *saldo_actualizado)
+{
 	int ret, size;
 	void *st_int;
 
@@ -127,7 +131,8 @@ int concurrente_incrementar_saldo(char *cuenta, int saldo, int *saldo_actualizad
 	return ret;
 }
 
-int concurrente_decrementar_saldo(char *cuenta, int saldo, int *saldo_actualizado){
+int concurrente_decrementar_saldo(char *cuenta, int saldo, int *saldo_actualizado)
+{
 	int ret, size;
 	void *st_int;
 
@@ -155,7 +160,8 @@ int concurrente_decrementar_saldo(char *cuenta, int saldo, int *saldo_actualizad
 	return ret;
 }
 
-int concurrente_obtener_saldo(char *cuenta, int *saldo){
+int concurrente_obtener_saldo(char *cuenta, int *saldo)
+{
     int saldo_aux=0;
 	int ret, size;
 	void *st_int;
