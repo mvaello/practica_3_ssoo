@@ -116,6 +116,9 @@ int concurrente_borrar_cuenta(char *cuenta)
 		pthread_cond_wait(&vacio, &mutex); // Se bloquea porque no hay cuentas
 	}
 
+
+	/* ------------------------------------------------- */
+	/* ------------------------------------------------- */
 	// Se borra la cuenta de la BD utilizando la librería proporcionada
 	ret = db_banco_borrar_cuenta(cuenta);
 	if(ret == 0){
@@ -128,6 +131,8 @@ int concurrente_borrar_cuenta(char *cuenta)
 			ret = db_banco_insertar_datos_internos(cuenta, st_int, size);
 		}
 	}
+	/* ------------------------------------------------- */
+	/* ------------------------------------------------- */
 
 	if(n_cuentas == MAX_CUENTAS - 1) // Duda: lleno pero no del todo??
 	{
@@ -212,6 +217,8 @@ int concurrente_obtener_saldo(char *cuenta, int *saldo)
 	/*
 	 *  Completar 	
 	 */
+
+	
 
 	// Se obtienen los datos internos para trabajar con ellos
 	ret = db_banco_obtener_datos_internos(cuenta, &st_int, &size);
