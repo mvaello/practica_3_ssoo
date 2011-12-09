@@ -44,6 +44,9 @@ int concurrente_crear_cuenta(char *cuenta)
 	 *  Completar 	
 	 */
 
+
+
+
 	ret = db_banco_existe_cuenta(cuenta);	
 	if (ret == 0){
 		ret = db_banco_crear_cuenta(cuenta);
@@ -68,6 +71,10 @@ int concurrente_obtener_num_cuentas(int *num_cuentas)
 	/*
 	 * Completar
 	 */
+
+	// Es necesario bloquear la creación de nuevas cuentas
+	
+
 	
 	// Se obtiene el número de cuentas del BD utilizando la librería proporcionada
 	ret = db_banco_obtener_num_cuentas(&num_cuentas_aux);
