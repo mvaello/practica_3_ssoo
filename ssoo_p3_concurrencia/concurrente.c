@@ -6,7 +6,12 @@
 #include <pthread.h>
 #include "bd_banco.h"
 #include "concurrente.h"
-#define MAX_ACCOUNT 16 //Se define el máximo de cuentas activas 
+#define MAX_CUENTAS 16 //Se define el mÃ¡ximo de cuentas activas 
+
+pthread_mutex_t mutex; // Para controlar el acceso a als cuentas
+pthread_cond_t db_lleno;
+pthread_cond_t db_vacio;
+
 
 int concurrente_init()
 {
@@ -39,14 +44,18 @@ int concurrente_crear_cuenta(char *cuenta)
 	int ret;
 	int size;
 	void *st_int;
-
+	int n_cuentas = concurrente_obtener_num_cuentas();
 	/*
 	 *  Completar 	
 	 */
+	 pthread_mutex_lock(&mutex);
+	 while(n_cuentas == MAX_CUENTAS)
+	 {
+	 	pthread_cond_wait(&lleno, &mutex); // Se bloquea para no crear mÃ¡s de 16 cuentas
+	 }
 
-
-
-
+	/* ------------------------------------------------- */
+	/* ------------------------------------------------- */
 	ret = db_banco_existe_cuenta(cuenta);	
 	if (ret == 0){
 		ret = db_banco_crear_cuenta(cuenta);
@@ -59,6 +68,15 @@ int concurrente_crear_cuenta(char *cuenta)
 			ret = db_banco_insertar_datos_internos(cuenta, st_int, size);
 		}
 	}
+	/* ------------------------------------------------- */
+	/* ------------------------------------------------- */
+
+	if(n_cuentas == MAX_CUENTAS) // Duda: Al menos una cuenta o tiene que estar lleno ??
+	{
+		pthread_cond_signal(&vacio);
+	}
+
+	pthread_mutex_unlock(&mutex);
 
 	return ret;
 }
@@ -72,11 +90,11 @@ int concurrente_obtener_num_cuentas(int *num_cuentas)
 	 * Completar
 	 */
 
-	// Es necesario bloquear la creación de nuevas cuentas
+	// Es necesario bloquear la creaciÃ³n de nuevas cuentas a la hora de contar
 	
 
 	
-	// Se obtiene el número de cuentas del BD utilizando la librería proporcionada
+	// Se obtiene el n?mero de cuentas del BD utilizando la librer?a proporcionada
 	ret = db_banco_obtener_num_cuentas(&num_cuentas_aux);
 
 	*num_cuentas = num_cuentas_aux;
@@ -92,9 +110,13 @@ int concurrente_borrar_cuenta(char *cuenta)
 	/*
 	 *  Completar 	
 	 */
- 
+	pthread_mutex_lock(&mutex);
+	while(n_cuentas == 0)
+	{
+		pthread_cond_wait(&vacio, &mutex); // Se bloquea porque no hay cuentas
+	}
 
-	// Se borra la cuenta de la BD utilizando la librería proporcionada
+	// Se borra la cuenta de la BD utilizando la librerÃ­a proporcionada
 	ret = db_banco_borrar_cuenta(cuenta);
 	if(ret == 0){
 		// Se leen los datos internos para resetearlos
@@ -106,6 +128,13 @@ int concurrente_borrar_cuenta(char *cuenta)
 			ret = db_banco_insertar_datos_internos(cuenta, st_int, size);
 		}
 	}
+
+	if(n_cuentas == MAX_CUENTAS - 1) // Duda: lleno pero no del todo??
+	{
+		pthread_cond_signal(&lleno);	// Si aun no se ha llenado la db de cuentas
+	}
+
+	pthread_mutex_unlock(&mutex); // Se consume la cuenta
 
 	return ret;
 }
@@ -124,13 +153,13 @@ int concurrente_incrementar_saldo(char *cuenta, int saldo, int *saldo_actualizad
 	// Se obtienen los datos internos para trabajar con ellos
 	ret = db_banco_obtener_datos_internos(cuenta, &st_int, &size);
 	if (ret == 0){
-		// Se obtiene el saldo actual de la cuenta utilizando la librería proporcionada
+		// Se obtiene el saldo actual de la cuenta utilizando la librerÃ­a proporcionada
 		ret = db_banco_obtener_saldo(cuenta, &saldo_aux);
 
 		// Se incrementa el saldo
 		saldo_aux += saldo;
 
-		// Se actualiza el saldo de la cuenta utilizando la librería proporcionada
+		// Se actualiza el saldo de la cuenta utilizando la librerÃ­a proporcionada
 		ret = db_banco_actualizar_cuenta(cuenta, saldo_aux);
 		*saldo_actualizado = saldo_aux;
 		
@@ -153,13 +182,13 @@ int concurrente_decrementar_saldo(char *cuenta, int saldo, int *saldo_actualizad
 	// Se obtienen los datos internos para trabajar con ellos
 	ret = db_banco_obtener_datos_internos(cuenta, &st_int, &size);
 	if (ret == 0){
-		// Se obtiene el saldo actual de la cuenta utilizando la librería proporcionada
+		// Se obtiene el saldo actual de la cuenta utilizando la librerÃ­a proporcionada
 		ret = db_banco_obtener_saldo(cuenta, &saldo_aux);
 
 		// Se decrementa el saldo
 		saldo_aux -= saldo;
 
-		// Se actualiza el saldo de la cuenta utilizando la librería proporcionada
+		// Se actualiza el saldo de la cuenta utilizando la librerÃ¬a proporcionada
 		ret = db_banco_actualizar_cuenta(cuenta, saldo_aux);
 		*saldo_actualizado = saldo_aux;
 
@@ -169,7 +198,7 @@ int concurrente_decrementar_saldo(char *cuenta, int saldo, int *saldo_actualizad
 }
 
 /*
-* La función "concurrente_obtener_saldo" retorna el saldo actual de la cuenta que 
+* La funci?n "concurrente_obtener_saldo" retorna el saldo actual de la cuenta que 
 * se desea consultar
 */	
 
@@ -188,7 +217,7 @@ int concurrente_obtener_saldo(char *cuenta, int *saldo)
 	ret = db_banco_obtener_datos_internos(cuenta, &st_int, &size);
 	if (ret == 0){
 	
-		// Se obtiene el saldo actual de la cuenta utilizando la librería proporcionada
+		// Se obtiene el saldo actual de la cuenta utilizando la librerÃ­a proporcionada
 		ret = db_banco_obtener_saldo(cuenta, &saldo_aux);
 		*saldo = saldo_aux;
 			
