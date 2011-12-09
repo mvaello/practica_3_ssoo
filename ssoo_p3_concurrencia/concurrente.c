@@ -168,6 +168,12 @@ int concurrente_decrementar_saldo(char *cuenta, int saldo, int *saldo_actualizad
 	return ret;
 }
 
+/*
+* La función "concurrente_obtener_saldo" retorna el saldo actual de la cuenta que 
+* se desea consultar
+*/	
+
+
 int concurrente_obtener_saldo(char *cuenta, int *saldo)
 {
 	int saldo_aux=0;
