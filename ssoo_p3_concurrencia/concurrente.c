@@ -6,9 +6,10 @@
 #include <pthread.h>
 #include "bd_banco.h"
 #include "concurrente.h"
+
 #define MAX_CUENTAS 16 //Se define el máximo de cuentas activas 
 
-pthread_mutex_t mutex; // Para controlar el acceso a als cuentas
+pthread_mutex_t mutex; // Para controlar el acceso a las cuentas
 pthread_cond_t db_lleno;
 pthread_cond_t db_vacio;
 
@@ -51,7 +52,7 @@ int concurrente_crear_cuenta(char *cuenta)
 	 pthread_mutex_lock(&mutex);
 	 while(n_cuentas == MAX_CUENTAS)
 	 {
-	 	pthread_cond_wait(&lleno, &mutex); // Se bloquea para no crear más de 16 cuentas
+	 	pthread_cond_wait(&db_lleno, &mutex); // Se bloquea para no crear más de 16 cuentas
 	 }
 
 	/* ------------------------------------------------- */
@@ -73,7 +74,7 @@ int concurrente_crear_cuenta(char *cuenta)
 
 	if(n_cuentas == MAX_CUENTAS) // Duda: Al menos una cuenta o tiene que estar lleno ??
 	{
-		pthread_cond_signal(&vacio);
+		pthread_cond_signal(&db_vacio);
 	}
 
 	pthread_mutex_unlock(&mutex);
